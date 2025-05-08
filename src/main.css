@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+.App-container {
+  background-color: #0b131e;
+}
+
+.App-header .App-search {
+  background-color: #202b3b;
+}
+
+.App-header .App-search:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+.App-header .App-search::placeholder {
+  padding-left: 5px;
+}
+
+.App-sidebar {
+  background-color: #202b3b;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
