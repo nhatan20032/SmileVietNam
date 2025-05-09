@@ -8,7 +8,7 @@ const TodayWeather = () => {
           Today's Forecast
         </header>
 
-        <div className="grid grid-cols-5 divide-x-1 divide-gray-700">
+        <div className="grid grid-cols-6 divide-x-1 divide-gray-700">
           {forecasts.map((item) => (
             <div className="text-center justify-center">
               <div className="text-gray-500 font-bold">{item.dt_txt}</div>

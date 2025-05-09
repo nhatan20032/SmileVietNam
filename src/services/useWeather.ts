@@ -59,15 +59,23 @@ export const useTodayForecast = () => {
   const [forecasts, setForecasts] = useState<WeatherForecast[]>([]);
 
   useEffect(() => {
-    Axios.get(
-      "https://api.openweathermap.org/data/2.5/forecast?lang=vi&appid=9c430f59eb9f8d987f5296640f5f80f1&id=1581130"
-    )
-      .then((res) => {
-        const today = new Date().toISOString().split("T")[0];
+    const fetchForecasts = async () => {
+      try {
+        const res = await Axios.get(
+          "https://api.openweathermap.org/data/2.5/forecast?lang=vi&appid=9c430f59eb9f8d987f5296640f5f80f1&id=1581130"
+        );
 
-        const filtered = res.data.list
-          .filter((item: any) => item.dt_txt.startsWith(today))
-          .slice(0, 5)
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        
+        // Ngày hôm sau
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+        // Lọc dữ liệu trong ngày hôm nay
+        const todayForecasts = res.data.list
+          .filter((item: any) => item.dt_txt.startsWith(todayStr))
           .map((item: any) => ({
             temp: Math.round(item.main.temp - 273.15),
             icon: item.weather[0]?.icon ?? "",
@@ -77,9 +85,30 @@ export const useTodayForecast = () => {
             }),
           }));
 
-        setForecasts(filtered);
-      })
-      .catch((err) => console.error("Lỗi gọi API", err));
+        // Nếu không đủ 6 bản ghi thì lấy thêm từ ngày hôm sau
+        if (todayForecasts.length < 6) {
+          const tomorrowForecasts = res.data.list
+            .filter((item: any) => item.dt_txt.startsWith(tomorrowStr))
+            .slice(0, 6 - todayForecasts.length)
+            .map((item: any) => ({
+              temp: Math.round(item.main.temp - 273.15),
+              icon: item.weather[0]?.icon ?? "",
+              dt_txt: new Date(item.dt_txt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            }));
+
+          setForecasts([...todayForecasts, ...tomorrowForecasts]);
+        } else {
+          setForecasts(todayForecasts.slice(0, 6));
+        }
+      } catch (err) {
+        console.error("Lỗi gọi API", err);
+      }
+    };
+
+    fetchForecasts();
   }, []);
 
   return { forecasts };
