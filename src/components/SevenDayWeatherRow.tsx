@@ -8,7 +8,7 @@ const SevenDayWeatherRow = () => {
       {weatherOfTheWeek.map((item, index) => (
         <div
           key={index}
-          className="flex items-center justify-between text-center px-5 py-3"
+          className=" w-[90%] mx-auto flex items-center justify-between text-center px-5 py-3"
         >
           <div className="w-1/3 text-gray-500 font-bold">{item.day}</div>
           <div className="w-1/3 flex flex-row items-center justify-center ">
@@ -17,7 +17,7 @@ const SevenDayWeatherRow = () => {
               alt="weather icon"
               className="w-auto h-auto"
             />
-            <span>{item.weather}</span>
+            <span className="font-bold">{item.weather}</span>
           </div>
           <div className="w-1/3">
             <span className="font-bold">{Math.round(item.temp_max - 273.15)}°</span>/
