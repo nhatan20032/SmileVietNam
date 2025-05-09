@@ -256,7 +256,7 @@ while (true)
             Console.WriteLine("\nXem toàn bộ sách");
 
             Console.Write("\nSearch: ");
-            var search = Console.ReadLine();
+            string? search = Console.ReadLine();
 
             _bookService.GetAllBook(search);
 
@@ -310,7 +310,7 @@ while (true)
                 Name = bookNameWriting!,
                 Summary = bookSummaryWriting!,
                 Description = bookDescriptionWriting!,
-                Author = bookAuthorWriting!,                
+                Author = bookAuthorWriting!,
             };
 
             _bookService.WritingBook(newBookWrite);

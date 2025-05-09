@@ -167,8 +167,8 @@ namespace LibraryManagement.Services
                     var bookSearch = _listBook.Where(book =>
                     {
                         bool matchBook = !string.IsNullOrEmpty(search) &&
-                                         (book.Name.Contains(search, StringComparison.OrdinalIgnoreCase) || book.Author.Contains(search, StringComparison.OrdinalIgnoreCase)
-                              || book.Id == int.Parse(search));
+                                         (book.Name?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
+                                          book.Author?.Contains(search, StringComparison.OrdinalIgnoreCase) == true);
 
                         var cateIds = _listBookCate
                                         .Where(t => t.BookId == book.Id)
@@ -185,6 +185,7 @@ namespace LibraryManagement.Services
 
                         return matchBook || matchCategory;
                     }).ToList();
+
 
                     if (bookSearch.Count == 0)
                     {
