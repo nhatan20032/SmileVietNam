@@ -22,7 +22,7 @@ const HighLightWeather = () => {
 
       <div className="w-1/3 flex justify-center items-center">
         <img
-          src={`http://openweathermap.org/img/wn/${icon}.png`}
+          src={`http://openweathermap.org/img/wn/${icon}@4x.png`}
           alt={weather}
           className="mx-auto w-70 h-auto"
         />

@@ -7,7 +7,7 @@ const TodayWeatherChildComponent = () => {
         <div key={index} className="text-center justify-center">
           <div className="text-gray-500 font-bold">{item.dt_txt}</div>
           <img
-            src={`https://openweathermap.org/img/wn/${item.icon}@2x.png`}
+            src={`https://openweathermap.org/img/wn/${item.icon}@4x.png`}
             alt="weather icon"
             className="mx-auto w-40 h-auto"
           />
