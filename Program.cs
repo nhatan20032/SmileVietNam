@@ -1,10 +1,8 @@
-﻿using LibraryManagement.Entities;
-using LibraryManagement.Enums;
+﻿using LibraryManagement.Enums;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Services;
 using LibraryManagement.ViewModels;
 using System.Text;
-using System.Xml.Linq;
 
 
 Console.OutputEncoding = Encoding.UTF8;
