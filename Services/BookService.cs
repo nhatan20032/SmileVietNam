@@ -168,7 +168,8 @@ namespace LibraryManagement.Services
                     {
                         bool matchBook = !string.IsNullOrEmpty(search) &&
                                          (book.Name?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
-                                          book.Author?.Contains(search, StringComparison.OrdinalIgnoreCase) == true);
+                                          book.Author?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
+                                          (int.TryParse(search, out int id) && book.Id == id));
 
                         var cateIds = _listBookCate
                                         .Where(t => t.BookId == book.Id)
