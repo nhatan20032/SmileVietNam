@@ -44,25 +44,8 @@ namespace LibraryManagement.Services
 
                 if (existingFilePath != null)
                 {
-                    Console.WriteLine("\nSách đã tồn tại trong kho nội dung.");
-
-                    Console.WriteLine($"\n--- Nội dung sách: {book.Name} ---\n");
-                    string content = File.ReadAllText(existingFilePath);
-
-                    Console.WriteLine($"{content} \n");
-
-                    Console.Write("Bạn có muốn dùng lại file cũ không? (y/n): ");
-                    var input = Console.ReadLine();
-
-                    if (input?.Trim().ToLower() == "y")
-                    {
-                        desPath = existingFilePath;
-                    }
-                    else
-                    {
-                        desPath = Path.Combine(storageFolder, $"{Guid.NewGuid()}_{fileName}");
-                        File.Copy(book.FilePath, desPath, overwrite: true);
-                    }
+                    Console.WriteLine("\nSách đã tồn tại trong kho nội dung. Dùng lại file cũ");
+                    desPath = existingFilePath;
                 }
                 else
                 {
@@ -308,24 +291,7 @@ namespace LibraryManagement.Services
 
                 if (existingFilePath != null)
                 {
-                    Console.WriteLine("\nSách đã tồn tại trong kho nội dung.");
-
-                    Console.WriteLine($"\n--- Nội dung sách: {book.Name} ---\n");
-                    string content = File.ReadAllText(existingFilePath);
-                    Console.WriteLine($"{content} \n");
-
-                    Console.Write("Bạn có muốn dùng lại file cũ không? (y/n): ");
-                    var input = Console.ReadLine();
-
-                    if (input?.Trim().ToLower() == "y")
-                    {
-                        _listBook[indexBook].FilePath = existingFilePath;
-                    }
-                    else
-                    {
-                        File.Copy(book.FilePath!, _listBook[indexBook].FilePath!, overwrite: true);
-                        _listBook[indexBook].FilePath = Path.Combine(storageFolder, $"{Guid.NewGuid()}_{fileName}");
-                    }
+                    _listBook[indexBook].FilePath = existingFilePath;
                 }
                 else
                 {
