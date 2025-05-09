@@ -1,8 +1,10 @@
-﻿using LibraryManagement.Enums;
+﻿using LibraryManagement.Entities;
+using LibraryManagement.Enums;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Services;
 using LibraryManagement.ViewModels;
 using System.Text;
+using System.Xml.Linq;
 
 
 Console.OutputEncoding = Encoding.UTF8;
@@ -84,7 +86,8 @@ while (true)
             {
                 Console.WriteLine("\nKhông có ID nào được thêm vào");
             }
-            var newBook = new ViewBook
+
+            _bookService.CreateBook(new ViewBook
             {
                 CategoryId = listCateId,
                 Name = bookName!,
@@ -93,9 +96,7 @@ while (true)
                 Author = bookAuthor!,
                 FilePath = bookFile,
                 PublishDate = publishDate
-            };
-
-            _bookService.CreateBook(newBook);
+            });
 
             Console.WriteLine("\nHoàn thành thêm sách");
             break;
@@ -304,16 +305,15 @@ while (true)
             {
                 Console.WriteLine("\nKhông có ID nào được thêm vào");
             }
-            var newBookWrite = new ViewBook
+
+            _bookService.WritingBook(new ViewBook
             {
                 CategoryId = listCateIdWrite,
                 Name = bookNameWriting!,
                 Summary = bookSummaryWriting!,
                 Description = bookDescriptionWriting!,
                 Author = bookAuthorWriting!,
-            };
-
-            _bookService.WritingBook(newBookWrite);
+            });
             break;
         case "7":
             Console.Write("\nNhập ID sách bạn muốn sửa: ");
