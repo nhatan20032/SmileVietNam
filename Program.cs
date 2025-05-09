@@ -8,7 +8,7 @@ using System.Text;
 Console.OutputEncoding = Encoding.UTF8;
 Console.InputEncoding = Encoding.UTF8;
 
-CategoryService categoryService = new CategoryService();
+CategoryService categoryService = new();
 IBookService _bookService = new BookService(categoryService);
 ICategoryService _categoryService = new CategoryService();
 
