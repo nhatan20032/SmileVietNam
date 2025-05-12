@@ -8,7 +8,7 @@ namespace LibraryManagement.Interfaces
         public void UdpateBook(ViewBook book);
         public void DeleteBook(int bookId);
         public void AddMoreCate(int bookId, List<int> cateid);
-        public void GetAllBook(string? search);
+        public IEnumerable<dynamic> GetAllBook(string? search);
         public ViewBook GetById(int id);
         public void ReadingBook(string search);
         public void WritingBook(ViewBook book);

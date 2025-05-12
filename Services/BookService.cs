@@ -12,7 +12,6 @@ namespace LibraryManagement.Services
         private string storageFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "book_storage");
 
         protected readonly ICategoryService _categoryService;
-
         public BookService(CategoryService categoryService)
         {
             _categoryService = categoryService;
@@ -157,100 +156,37 @@ namespace LibraryManagement.Services
             }
         }
 
-        public void GetAllBook(string? search)
+        public IEnumerable<dynamic> GetAllBook(string? search)
         {
             try
             {
                 if (!string.IsNullOrEmpty(search))
                 {
-                    var allCategory = _categoryService.GetCategories();
-                    var bookSearch = _listBook.Where(book =>
-                    {
-                        bool matchBook = !string.IsNullOrEmpty(search) &&
-                                         (book.Name?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
-                                          book.Author?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
-                                          (int.TryParse(search, out int id) && book.Id == id));
+                    var bookSearch = from book in _listBook
+                                     join bookCate in _listBookCate on book.Id equals bookCate.BookId
+                                     join cate in _categoryService.GetCategories() on bookCate.CategoryId equals cate.Id
+                                     where book.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                                           book.Author.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                                           (int.TryParse(search, out int id) && book.Id == id)
+                                     group cate.Name by book into g
+                                     select new { Id = g.Key.Id, Name = g.Key.Name, Author = g.Key.Author, Summary = g.Key.Summary, Des = g.Key.Description, Publish = g.Key.PublishDate, CreatedAt = g.Key.CreateAt, Status = g.Key.Status, CateName = g.ToList()};
 
-                        var cateIds = _listBookCate
-                                        .Where(t => t.BookId == book.Id)
-                                        .Select(t => t.CategoryId)
-                                        .ToList();
-
-                        var cateNames = allCategory
-                                        .Where(c => cateIds.Contains(c.Id))
-                                        .Select(c => c.Name)
-                                        .ToList();
-
-                        bool matchCategory = !string.IsNullOrEmpty(search) &&
-                                             cateNames.Any(name => name.Contains(search, StringComparison.OrdinalIgnoreCase));
-
-                        return matchBook || matchCategory;
-                    }).ToList();
-
-
-                    if (bookSearch.Count == 0)
-                    {
-                        Console.WriteLine("\nKhông tìm thấy sách phù hợp.");
-                        return;
-                    }
-                    Console.WriteLine("\nDanh sách sách là: ");
-                    foreach (var book in bookSearch)
-                    {
-                        Console.WriteLine($"\nId sách: {book.Id}");
-                        Console.WriteLine($"Tên sách: {book.Name}");
-                        Console.WriteLine($"Tên tác giả: {book.Author}");
-                        Console.WriteLine($"Nội dung tổng quát: {book.Summary}");
-                        Console.WriteLine($"Mô tả: {book.Description}");
-                        Console.WriteLine($"Ngày phát hành: {book.PublishDate}");
-                        Console.WriteLine($"Ngày thêm sách: {book.CreateAt}");
-
-                        var cateIds = _listBookCate
-                                        .Where(t => t.BookId == book.Id)
-                                        .Select(t => t.CategoryId)
-                                        .ToList();
-
-                        var cateNames = allCategory
-                                        .Where(c => cateIds.Contains(c.Id))
-                                        .Select(c => c.Name)
-                                        .ToList();
-
-                        Console.WriteLine("Thể loại: " + string.Join(", ", cateNames));
-                        Console.WriteLine($"Trạng thái: {book.Status}\n");
-                    }
+                    return bookSearch;
                 }
                 else
                 {
-                    var allCategory = _categoryService.GetCategories();
-
-                    Console.WriteLine("\nDanh sách sách là: ");
-                    foreach (var book in _listBook)
-                    {
-                        Console.WriteLine($"\nId sách: {book.Id}");
-                        Console.WriteLine($"Tên sách: {book.Name}");
-                        Console.WriteLine($"Tên tác giả: {book.Author}");
-                        Console.WriteLine($"Nội dung tổng quát: {book.Summary}");
-                        Console.WriteLine($"Mô tả: {book.Description}");
-                        Console.WriteLine($"Ngày phát hành: {book.PublishDate}");
-                        Console.WriteLine($"Ngày thêm sách: {book.CreateAt}");
-
-                        var cateIds = _listBookCate
-                                        .Where(t => t.BookId == book.Id)
-                                        .Select(t => t.CategoryId)
-                                        .ToList();
-
-                        var cateNames = allCategory
-                                        .Where(c => cateIds.Contains(c.Id))
-                                        .Select(c => c.Name)
-                                        .ToList();
-
-                        Console.WriteLine("Thể loại: " + string.Join(", ", cateNames));
-                        Console.WriteLine($"Trạng thái: {book.Status}");
-                    }
+                    var bookSearch = from book in _listBook
+                                     join bookCate in _listBookCate on book.Id equals bookCate.BookId
+                                     join cate in _categoryService.GetCategories() on bookCate.CategoryId equals cate.Id
+                                     group cate.Name by book into g
+                                     select new { Id = g.Key.Id, Name = g.Key.Name, Author = g.Key.Author, Summary = g.Key.Summary, Des = g.Key.Description, Publish = g.Key.PublishDate, CreatedAt = g.Key.CreateAt, Status = g.Key.Status, CateName = g.ToList() };
+                    return bookSearch;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Đã sảy ra lỗi: {ex.Message}");
+                return null!;
             }
         }
 

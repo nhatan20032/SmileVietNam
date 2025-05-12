@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Enums;
+﻿using LibraryManagement.ConsoleWritelineFile;
+using LibraryManagement.Enums;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Services;
 using LibraryManagement.ViewModels;
@@ -9,6 +10,7 @@ Console.OutputEncoding = Encoding.UTF8;
 Console.InputEncoding = Encoding.UTF8;
 
 CategoryService categoryService = new();
+IConsoleLogBookcs consoleLogBook = new ConsoleLogBook();
 IBookService _bookService = new BookService(categoryService);
 ICategoryService _categoryService = new CategoryService();
 
@@ -257,8 +259,13 @@ while (true)
             Console.Write("\nSearch: ");
             string? search = Console.ReadLine();
 
-            _bookService.GetAllBook(search);
-
+            var getAllResult = _bookService.GetAllBook(search);
+            if (!getAllResult.Any())
+            {
+                Console.WriteLine("\nKhông có sách nào trong kho\n");
+                break;
+            }
+            consoleLogBook.GetAllBookLog(getAllResult);
             break;
         case "6":
             Console.WriteLine("Tính năng viết sách !!\n");
